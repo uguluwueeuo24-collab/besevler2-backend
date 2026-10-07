@@ -3,19 +3,19 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app) # APK ve tarayıcı erişim izni
+CORS(app) # APK ve tarayıcı erişim izinlerini açar
 
 SISTEM_KILITLI = False
 
-# Ana sayfa isteği (Render ve APK kontrolü için)
+# Ana sayfa rotası (Render'ın 404 vermesini engeller)
 @app.route('/', methods=['GET'])
 def anasayfa():
     return jsonify({
         "status": "ok",
-        "mesaj": "Beşevler Jet Kurye Sunucusu Çalışıyor!"
+        "mesaj": "Beşevler Jet Kurye Sunucusu Aktif!"
     })
 
-# Durum kontrolü
+# Uygulama durum kontrolü
 @app.route('/durum', methods=['GET'])
 def durum_kontrol():
     acik_mi = not SISTEM_KILITLI
@@ -25,7 +25,7 @@ def durum_kontrol():
         "mesaj": "Siparişler açık!" if acik_mi else "Şu an sipariş kabul edilmiyor."
     })
 
-# Kilit değiştirme
+# Kurye paneli kilit yönetimi
 @app.route('/kilitle', methods=['POST'])
 def kilit_degistir():
     global SISTEM_KILITLI
